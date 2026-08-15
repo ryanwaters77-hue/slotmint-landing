@@ -2,15 +2,6 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 
-/**
- * ADVANCED SCROLL EFFECTS in Hero:
- * 1. useScroll({ target, offset }) - section-relative progress
- * 2. Multiple useTransform mappings from same progress
- * 3. useSpring for smoothed values (less jitter)
- * 4. Clip-path morph (circle expand = mask reveal)
- * 5. Independent parallax rates (scale, y, opacity, blur)
- * 6. Sticky container inside tall scroll track
- */
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null)
 
@@ -41,6 +32,7 @@ export default function Hero() {
   const contentOpacity = useTransform(smoothProgress, [0, 0.15, 0.45], [1, 1, 0])
   const contentBlur = useTransform(smoothProgress, [0, 0.4], [0, 12])
   const contentScale = useTransform(smoothProgress, [0, 0.5], [1, 0.92])
+  const contentFilter = useTransform(contentBlur, (v) => `blur(${v}px)`)
 
   const overlayOpacity = useTransform(smoothProgress, [0, 0.5], [0.3, 0.7])
 
@@ -87,7 +79,7 @@ export default function Hero() {
             y: contentY,
             opacity: contentOpacity,
             scale: contentScale,
-            filter: useTransform(contentBlur, (v) => `blur(${v}px)`),
+            filter: contentFilter,
           }}
         >
           <div className="space-y-6 max-w-4xl">
